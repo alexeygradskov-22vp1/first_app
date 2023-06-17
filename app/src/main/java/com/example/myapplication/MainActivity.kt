@@ -7,31 +7,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.activity.ComponentActivity
-import androidx.compose.material3.contentColorFor
-import androidx.core.content.ContextCompat.startActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.data.Item
 
 
-class MainActivity : ComponentActivity() {
-    private lateinit var binding: R
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val tb: Toolbar = findViewById(R.id.toolbar)
+        tb.setTitle(R.string.app_name)
         val recyclerView: RecyclerView = findViewById(R.id.list)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = CustomRecyclerAdapter(getList())
+    }
+
+    fun getList(): ArrayList<Item>{
         val items1 = resources.getStringArray(R.array.items1)
         val items2 = resources.getStringArray(R.array.items2)
-        val array: Array<Array<String>> = arrayOf(items1, items2)
-        recyclerView.adapter = CustomRecyclerAdapter(array)
+        val items: ArrayList<Item> = ArrayList()
+        items1.forEachIndexed { index, item -> items.add(Item(item, items2[index])) }
+        return items
     }
 
 }
 
-class CustomRecyclerAdapter(private val names: Array<Array<String>>) :
+class CustomRecyclerAdapter(private val names: ArrayList<Item>) :
     RecyclerView.Adapter<CustomRecyclerAdapter.MyViewHolder>() {
-    lateinit var _context: Context;
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemText: TextView = itemView.findViewById(R.id.item_text)
@@ -45,16 +48,11 @@ class CustomRecyclerAdapter(private val names: Array<Array<String>>) :
         return MyViewHolder(itemView)
     }
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        _context = recyclerView.context
-    }
-
-
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.itemText.text = names[0][position]
-        holder.description.text = names[1][position]
-        holder?.itemView?.setOnClickListener {
+        holder.itemText.text = names[position].title
+        val _context :Context = holder.itemView.context
+        holder.description.text = names[position].description
+        holder.itemView.setOnClickListener {
             val intent = Intent(_context, AboutActivity::class.java)
             intent
                 .putExtra("position", position)
@@ -62,7 +60,7 @@ class CustomRecyclerAdapter(private val names: Array<Array<String>>) :
         }
     }
 
-    override fun getItemCount() = names[0].size
+    override fun getItemCount() = names.size
 
 }
 
