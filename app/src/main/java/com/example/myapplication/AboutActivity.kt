@@ -1,9 +1,11 @@
 package com.example.myapplication
 
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.bumptech.glide.Glide
 
 class AboutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,11 +14,11 @@ class AboutActivity : AppCompatActivity() {
         val tb: Toolbar = findViewById(R.id.AboutActivityTB)
         setSupportActionBar(tb)
         tb.setNavigationOnClickListener{finish()}
-        val position = intent?.extras?.getInt("position")?:(0)
         val nameText: TextView = findViewById(R.id.name_text)
         val descriptionText: TextView = findViewById(R.id.descript_text)
-        tb.title = resources.getStringArray(R.array.items1)[position]
-        nameText.text = resources.getStringArray(R.array.items1)[position]
-        descriptionText.text = resources.getStringArray(R.array.items2)[position]
+        val img: ImageView = findViewById(R.id.IMG)
+        Glide.with(this).load(intent?.extras?.getString("linkIMG")).into(img)
+        nameText.text = intent?.extras?.getString("name")
+        descriptionText.text = intent?.extras?.getString("descript")
     }
 }
