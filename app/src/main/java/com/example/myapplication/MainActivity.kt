@@ -25,11 +25,10 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = CustomRecyclerAdapter(getList())
     }
 
-    fun getList(): ArrayList<Item> {
-        val items: ArrayList<Item> = ArrayList()
-        val links: ArrayList<String> =
-            ArrayList(
-                listOf(
+    private fun getList(): MutableList<Item> {
+        val items: MutableList<Item> = mutableListOf()
+        val links: MutableList<String> =
+            mutableListOf(
                     "https://sun9-39.userapi.com/s/v1/ig2/VoIuXZFyFLsVO3C4-bFPfXymVYqO" +
                             "_i_rTuQbNQyscf45BRJpqggy2-4nwFpUt40FgSBRzpbcmK-as1Ifbd2NA4lX.j" +
                             "pg?size=600x376&quality=96&type=album",
@@ -39,14 +38,14 @@ class MainActivity : AppCompatActivity() {
                     "https://i.ytimg.com/vi/Ae6aHDMtzBs/maxresdefault.jpg?" +
                             "sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgVChEMA8=&" +
                             "rs=AOn4CLAJmwLwIgDPnhD5SpbwuLa_Rl6GSQ"
-                )
+
             )
         for (i in 0..100) {
             items.add(
                 Item(
-                    "Элемент" + i,
-                    "Описание элемента" + i,
-                    links[(0..links.size-1).random()]
+                    getString(R.string.titleText)+i,
+                    getString(R.string.descriptionText) + i,
+                    links[(0 until links.size).random()]
                 )
             )
         }
@@ -55,13 +54,13 @@ class MainActivity : AppCompatActivity() {
 
 }
 
-class CustomRecyclerAdapter(private val names: ArrayList<Item>) :
+class CustomRecyclerAdapter(private val names: MutableList<Item>) :
     RecyclerView.Adapter<CustomRecyclerAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemText: TextView = itemView.findViewById(R.id.item_text)
         val description: TextView = itemView.findViewById(R.id.item_description)
-        val itemIMG: ImageView = itemView.findViewById(R.id.itemIMG)
+        val itemIMG: ImageView = itemView.findViewById(R.id.item_img)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -73,16 +72,16 @@ class CustomRecyclerAdapter(private val names: ArrayList<Item>) :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.itemText.text = names[position].title
-        val _context: Context = holder.itemView.context
+        val context: Context = holder.itemView.context
         holder.description.text = names[position].description
-        Glide.with(_context).load(names[position].imgLink).into(holder.itemIMG)
+        Glide.with(context).load(names[position].imgLink).into(holder.itemIMG)
         holder.itemView.setOnClickListener {
-            val intent = Intent(_context, AboutActivity::class.java)
-            intent
-                .putExtra("name", names[position].title)
-            intent.putExtra("descript", names[position].description)
-            intent.putExtra("linkIMG", names[position].imgLink)
-            _context.startActivity(intent)
+            val intent = Intent(context, AboutActivity::class.java).apply {
+                putExtra(context.getString(R.string.titleTag), names[position].title)
+                putExtra(context.getString(R.string.descriptTag), names[position].description)
+                putExtra(context.getString(R.string.linkIMGTag), names[position].imgLink)
+            }
+            context.startActivity(intent)
         }
     }
 

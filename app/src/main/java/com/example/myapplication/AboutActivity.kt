@@ -16,9 +16,9 @@ class AboutActivity : AppCompatActivity() {
         tb.setNavigationOnClickListener{finish()}
         val nameText: TextView = findViewById(R.id.name_text)
         val descriptionText: TextView = findViewById(R.id.descript_text)
-        val img: ImageView = findViewById(R.id.IMG)
-        Glide.with(this).load(intent?.extras?.getString("linkIMG")).into(img)
-        nameText.text = intent?.extras?.getString("name")
-        descriptionText.text = intent?.extras?.getString("descript")
+        val img: ImageView = findViewById(R.id.img)
+        Glide.with(this).load(intent?.extras?.getString(getString(R.string.linkIMGTag))).into(img)
+        nameText.text = intent?.extras?.getString(getString(R.string.titleTag))
+        descriptionText.text = intent?.extras?.getString(getString(R.string.descriptTag))
     }
 }

@@ -1,17 +1,8 @@
 <resources>
     <string name="app_name">My Application</string>
-    <string-array name="items1">
-        <item>Элемент1</item>
-        <item>Элемент2</item>
-        <item>Элемент3</item>
-        <item>Элемент4</item>
-        <item>Элемент5</item>
-    </string-array>
-    <string-array name="items2">
-        <item>текст элемента 1</item>
-        <item>текст элемента 2</item>
-        <item>текст элемента 3</item>
-        <item>текст элемента 4</item>
-        <item>текст элемента 5</item>
-    </string-array>
+    <string name="titleText">Элемент</string>
+    <string name="descriptionText">Описание элемента</string>
+    <string name="titleTag">name</string>
+    <string name="descriptTag">descript</string>
+    <string name="linkIMGTag">linkIMG</string>
 </resources>
