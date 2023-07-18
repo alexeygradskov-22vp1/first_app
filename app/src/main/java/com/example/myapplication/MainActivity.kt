@@ -10,49 +10,29 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.data.Item
+import com.example.myapplication.data.ItemRepository
 
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var listViewModel: ItemRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val tb: Toolbar = findViewById(R.id.toolbar)
         tb.setTitle(R.string.app_name)
         val recyclerView: RecyclerView = findViewById(R.id.list)
-        recyclerView.adapter = CustomRecyclerAdapter(getList())
+        listViewModel= ViewModelProvider(this).get(ItemRepository::class.java)
+        listViewModel.list.observe(this
+        ) { list -> recyclerView.adapter = CustomRecyclerAdapter(list) }
+        listViewModel.fetchData()
     }
 
-    private fun getList(): MutableList<Item> {
-        val items: MutableList<Item> = mutableListOf()
-        val links: MutableList<String> =
-            mutableListOf(
-                    "https://sun9-39.userapi.com/s/v1/ig2/VoIuXZFyFLsVO3C4-bFPfXymVYqO" +
-                            "_i_rTuQbNQyscf45BRJpqggy2-4nwFpUt40FgSBRzpbcmK-as1Ifbd2NA4lX.j" +
-                            "pg?size=600x376&quality=96&type=album",
-                    "https://yt3.googleusercontent.com/"
-                            + "ytc/AL5GRJWz1KzN6a2IZaCcdGpO3um5qdGI4R3W1ILIzSBl1w=s900-c-k-"
-                            + "c0x00ffffff-no-rj",
-                    "https://i.ytimg.com/vi/Ae6aHDMtzBs/maxresdefault.jpg?" +
-                            "sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgVChEMA8=&" +
-                            "rs=AOn4CLAJmwLwIgDPnhD5SpbwuLa_Rl6GSQ"
 
-            )
-        for (i in 0..100) {
-            items.add(
-                Item(
-                    getString(R.string.titleText)+i,
-                    getString(R.string.descriptionText) + i,
-                    links[(0 until links.size).random()]
-                )
-            )
-        }
-        return items
-    }
-
-}
 
 class CustomRecyclerAdapter(private val names: MutableList<Item>) :
     RecyclerView.Adapter<CustomRecyclerAdapter.MyViewHolder>() {
@@ -87,5 +67,5 @@ class CustomRecyclerAdapter(private val names: MutableList<Item>) :
 
     override fun getItemCount() = names.size
 
-}
+}}
 
